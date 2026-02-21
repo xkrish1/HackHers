@@ -43,20 +43,20 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
     return <Minus className="h-4 w-4" />
   }
 
-  function getRiskBg(value: number) {
-    if (value < 35) return "bg-risk-low"
-    if (value <= 70) return "bg-risk-medium"
-    return "bg-risk-high"
-  }
-
   function getRiskText(value: number) {
     if (value < 35) return "text-risk-low"
     if (value <= 70) return "text-risk-medium"
     return "text-risk-high"
   }
 
+  function getRiskGlow(value: number) {
+    if (value < 35) return "shadow-[0_0_24px_-4px_hsl(152,69%,46%,0.25)]"
+    if (value <= 70) return "shadow-[0_0_24px_-4px_hsl(38,92%,55%,0.25)]"
+    return "shadow-[0_0_24px_-4px_hsl(0,72%,55%,0.25)]"
+  }
+
   return (
-    <Card>
+    <Card className="glass-subtle rounded-xl">
       <CardHeader>
         <CardTitle className="text-sm font-medium text-muted-foreground">
           What-If Simulator
@@ -75,7 +75,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 <label className="text-sm font-medium text-foreground">
                   Sleep Hours
                 </label>
-                <span className="font-mono text-sm font-semibold text-foreground">
+                <span className="font-mono text-sm font-semibold text-primary">
                   {sleepHours[0]}h
                 </span>
               </div>
@@ -86,7 +86,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 max={10}
                 step={0.5}
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-[11px] text-muted-foreground">
                 <span>3h</span>
                 <span>10h</span>
               </div>
@@ -98,7 +98,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 <label className="text-sm font-medium text-foreground">
                   Deadlines (next 7 days)
                 </label>
-                <span className="font-mono text-sm font-semibold text-foreground">
+                <span className="font-mono text-sm font-semibold text-primary">
                   {deadlines[0]}
                 </span>
               </div>
@@ -109,7 +109,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 max={10}
                 step={1}
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-[11px] text-muted-foreground">
                 <span>0</span>
                 <span>10</span>
               </div>
@@ -121,7 +121,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 <label className="text-sm font-medium text-foreground">
                   Work Hours / Week
                 </label>
-                <span className="font-mono text-sm font-semibold text-foreground">
+                <span className="font-mono text-sm font-semibold text-primary">
                   {workHours[0]}h
                 </span>
               </div>
@@ -132,7 +132,7 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
                 max={80}
                 step={1}
               />
-              <div className="flex justify-between text-xs text-muted-foreground">
+              <div className="flex justify-between text-[11px] text-muted-foreground">
                 <span>20h</span>
                 <span>80h</span>
               </div>
@@ -140,19 +140,25 @@ export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
           </div>
 
           {/* Result display */}
-          <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-border bg-accent/30 px-8 py-6 md:min-w-[180px]">
-            <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          <div className={`flex flex-col items-center justify-center gap-3 rounded-xl glass px-8 py-6 md:min-w-[180px] ${getRiskGlow(newRisk)}`}>
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
               New Projected Risk
             </span>
-            <div className="flex items-baseline gap-1">
-              <span className={`text-4xl font-bold ${getRiskText(newRisk)}`}>
-                {newRisk}%
-              </span>
-            </div>
+            <span className={`text-4xl font-bold ${getRiskText(newRisk)}`}>
+              {newRisk}%
+            </span>
             <div className="h-1.5 w-full max-w-[120px] overflow-hidden rounded-full bg-secondary">
               <div
-                className={`h-full rounded-full transition-all duration-300 ${getRiskBg(newRisk)}`}
-                style={{ width: `${newRisk}%` }}
+                className="h-full rounded-full transition-all duration-300"
+                style={{
+                  width: `${newRisk}%`,
+                  backgroundColor:
+                    newRisk < 35
+                      ? "hsl(var(--risk-low))"
+                      : newRisk <= 70
+                        ? "hsl(var(--risk-medium))"
+                        : "hsl(var(--risk-high))",
+                }}
               />
             </div>
             <div

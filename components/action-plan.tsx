@@ -32,7 +32,7 @@ export function ActionPlan() {
   const completed = items.filter((i) => i.checked).length
 
   return (
-    <Card>
+    <Card className="glass-subtle rounded-xl">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -44,11 +44,11 @@ export function ActionPlan() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           {items.map((item) => (
             <label
               key={item.id}
-              className="flex cursor-pointer items-start gap-3 rounded-lg p-2 transition-colors hover:bg-accent/50"
+              className="flex cursor-pointer items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-glass-highlight"
             >
               <Checkbox
                 checked={item.checked}
@@ -69,7 +69,7 @@ export function ActionPlan() {
         </div>
       </CardContent>
       <CardFooter>
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           <Info className="h-3 w-3" />
           <span>Not medical advice. Consult a professional for clinical concerns.</span>
         </div>

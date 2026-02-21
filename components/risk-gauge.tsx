@@ -3,17 +3,15 @@
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 
 function getRiskLevel(value: number) {
-  if (value < 35) return { label: "Low", color: "text-risk-low", bg: "bg-risk-low" }
-  if (value <= 70) return { label: "Medium", color: "text-risk-medium", bg: "bg-risk-medium" }
-  return { label: "High", color: "text-risk-high", bg: "bg-risk-high" }
+  if (value < 35) return { label: "Low", color: "text-risk-low" }
+  if (value <= 70) return { label: "Medium", color: "text-risk-medium" }
+  return { label: "High", color: "text-risk-high" }
 }
 
-function GaugeSVG({ value }: { value: number }) {
+function GaugeSVG({ value, size = 220 }: { value: number; size?: number }) {
   const risk = getRiskLevel(value)
   const startAngle = -225
   const endAngle = 45
@@ -47,14 +45,25 @@ function GaugeSVG({ value }: { value: number }) {
         ? "hsl(var(--risk-medium))"
         : "hsl(var(--risk-high))"
 
+  const glowColor =
+    value < 35
+      ? "0 0 18px hsla(152,69%,46%,0.4)"
+      : value <= 70
+        ? "0 0 18px hsla(38,92%,55%,0.4)"
+        : "0 0 18px hsla(0,72%,55%,0.4)"
+
   return (
-    <svg viewBox="0 0 200 140" className="mx-auto w-full max-w-[220px]">
+    <svg
+      viewBox="0 0 200 140"
+      className="mx-auto w-full"
+      style={{ maxWidth: size, filter: `drop-shadow(${glowColor})` }}
+    >
       {/* Background arc */}
       <path
         d={`M ${bgStart.x} ${bgStart.y} A ${r} ${r} 0 ${bgLargeArc} 1 ${bgEnd.x} ${bgEnd.y}`}
         fill="none"
         stroke="hsl(var(--border))"
-        strokeWidth="14"
+        strokeWidth="12"
         strokeLinecap="round"
       />
       {/* Value arc */}
@@ -63,7 +72,7 @@ function GaugeSVG({ value }: { value: number }) {
           d={`M ${bgStart.x} ${bgStart.y} A ${r} ${r} 0 ${valueLargeArc} 1 ${valueEnd.x} ${valueEnd.y}`}
           fill="none"
           stroke={strokeColor}
-          strokeWidth="14"
+          strokeWidth="12"
           strokeLinecap="round"
         />
       )}
@@ -98,7 +107,7 @@ function GaugeSVG({ value }: { value: number }) {
         textAnchor="middle"
         dominantBaseline="central"
         className="fill-foreground font-sans"
-        fontSize="36"
+        fontSize="34"
         fontWeight="700"
       >
         {value}%
@@ -106,10 +115,10 @@ function GaugeSVG({ value }: { value: number }) {
       {/* Label */}
       <text
         x={cx}
-        y={cy + 24}
+        y={cy + 22}
         textAnchor="middle"
         dominantBaseline="central"
-        fontSize="12"
+        fontSize="11"
         fontWeight="600"
         fill={strokeColor}
       >
@@ -119,17 +128,42 @@ function GaugeSVG({ value }: { value: number }) {
   )
 }
 
-export function RiskGauge({ value = 72 }: { value?: number }) {
-  const risk = getRiskLevel(value)
+interface RiskGaugeProps {
+  value?: number
+  compact?: boolean
+}
+
+export function RiskGauge({ value = 72, compact = false }: RiskGaugeProps) {
+  if (compact) {
+    return (
+      <Card className="glass-subtle rounded-xl">
+        <CardContent className="flex flex-col items-center p-4">
+          <GaugeSVG value={value} size={180} />
+          <div className="mt-2 flex items-center gap-4 text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-risk-low" />
+              <span>{"<35"}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-risk-medium" />
+              <span>{"35-70"}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-risk-high" />
+              <span>{">70"}</span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+    <Card className="glass-subtle rounded-xl">
+      <CardContent className="flex flex-col items-center p-6">
+        <p className="mb-2 text-sm font-medium text-muted-foreground">
           Burnout Risk Score
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col items-center">
+        </p>
         <GaugeSVG value={value} />
         <div className="mt-4 flex items-center gap-6 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">

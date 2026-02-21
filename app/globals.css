@@ -5,84 +5,50 @@
 :root {
   --radius: 0.625rem;
 
-  --background: 210 20% 98%;
-  --foreground: 215 25% 12%;
+  /* Deep ocean dark palette — always dark */
+  --background: 220 25% 6%;
+  --foreground: 210 20% 92%;
 
-  --card: 0 0% 100%;
-  --card-foreground: 215 25% 12%;
+  --card: 215 25% 10%;
+  --card-foreground: 210 20% 92%;
 
-  --popover: 0 0% 100%;
-  --popover-foreground: 215 25% 12%;
+  --popover: 215 25% 10%;
+  --popover-foreground: 210 20% 92%;
 
-  --primary: 173 58% 39%;
-  --primary-foreground: 0 0% 100%;
+  --primary: 175 70% 42%;
+  --primary-foreground: 220 25% 6%;
 
-  --secondary: 210 16% 93%;
-  --secondary-foreground: 215 25% 27%;
+  --secondary: 215 22% 14%;
+  --secondary-foreground: 210 16% 75%;
 
-  --muted: 210 16% 93%;
-  --muted-foreground: 215 12% 50%;
+  --muted: 215 22% 14%;
+  --muted-foreground: 215 14% 52%;
 
-  --accent: 210 16% 93%;
-  --accent-foreground: 215 25% 12%;
+  --accent: 215 22% 16%;
+  --accent-foreground: 210 20% 92%;
 
-  --destructive: 0 72% 51%;
+  --destructive: 0 72% 55%;
   --destructive-foreground: 0 0% 100%;
 
-  --border: 214 18% 89%;
-  --input: 214 18% 89%;
-  --ring: 173 58% 39%;
+  --border: 215 20% 16%;
+  --input: 215 20% 16%;
+  --ring: 175 70% 42%;
 
-  --chart-1: 173 58% 39%;
-  --chart-2: 38 92% 50%;
-  --chart-3: 0 72% 51%;
-  --chart-4: 215 25% 27%;
-  --chart-5: 210 16% 70%;
-
-  /* Custom risk colors */
-  --risk-low: 152 69% 41%;
-  --risk-medium: 38 92% 50%;
-  --risk-high: 0 72% 51%;
-}
-
-.dark {
-  --background: 215 28% 8%;
-  --foreground: 210 20% 95%;
-
-  --card: 215 25% 12%;
-  --card-foreground: 210 20% 95%;
-
-  --popover: 215 25% 12%;
-  --popover-foreground: 210 20% 95%;
-
-  --primary: 173 58% 45%;
-  --primary-foreground: 0 0% 100%;
-
-  --secondary: 215 20% 18%;
-  --secondary-foreground: 210 16% 80%;
-
-  --muted: 215 20% 18%;
-  --muted-foreground: 215 12% 55%;
-
-  --accent: 215 20% 18%;
-  --accent-foreground: 210 20% 95%;
-
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border: 215 20% 20%;
-  --input: 215 20% 20%;
-  --ring: 173 58% 45%;
-
-  --chart-1: 173 58% 45%;
+  --chart-1: 175 70% 42%;
   --chart-2: 38 92% 55%;
   --chart-3: 0 72% 55%;
-  --chart-4: 210 20% 70%;
-  --chart-5: 215 12% 40%;
+  --chart-4: 210 20% 65%;
+  --chart-5: 215 14% 38%;
 
+  /* Risk colors */
   --risk-low: 152 69% 46%;
   --risk-medium: 38 92% 55%;
   --risk-high: 0 72% 55%;
+
+  /* Glassmorphism tokens */
+  --glass-bg: 215 25% 12% / 0.4;
+  --glass-border: 210 20% 92% / 0.08;
+  --glass-highlight: 210 20% 92% / 0.04;
 }
 
 @theme inline {
@@ -116,6 +82,9 @@
   --color-risk-low: hsl(var(--risk-low));
   --color-risk-medium: hsl(var(--risk-medium));
   --color-risk-high: hsl(var(--risk-high));
+  --color-glass-bg: hsl(var(--glass-bg));
+  --color-glass-border: hsl(var(--glass-border));
+  --color-glass-highlight: hsl(var(--glass-highlight));
 }
 
 @layer base {
@@ -125,4 +94,39 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+}
+
+/* Glassmorphism card utility */
+.glass {
+  background: hsl(var(--glass-bg));
+  border: 1px solid hsl(var(--glass-border));
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.glass-subtle {
+  background: hsl(215 25% 10% / 0.55);
+  border: 1px solid hsl(var(--glass-border));
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for the dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
 }

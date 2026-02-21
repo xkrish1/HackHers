@@ -20,7 +20,7 @@ interface ContributingFactorsProps {
 
 export function ContributingFactors({ factors }: ContributingFactorsProps) {
   return (
-    <Card>
+    <Card className="glass-subtle rounded-xl">
       <CardHeader>
         <CardTitle className="text-sm font-medium text-muted-foreground">
           Contributing Factors
@@ -36,12 +36,13 @@ export function ContributingFactors({ factors }: ContributingFactorsProps) {
                   {factor.value.toFixed(2)}
                 </span>
               </div>
-              <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+              <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${factor.value * 100}%`,
                     backgroundColor: getBarColor(factor.value),
+                    boxShadow: `0 0 8px ${getBarColor(factor.value)}40`,
                   }}
                 />
               </div>

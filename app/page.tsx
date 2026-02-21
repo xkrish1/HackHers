@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { TopNav } from "@/components/top-nav"
-import { ScenarioSelector } from "@/components/scenario-selector"
+import { Sidebar } from "@/components/sidebar"
 import { RiskGauge } from "@/components/risk-gauge"
 import { ProjectionChart } from "@/components/projection-chart"
 import { AlertCard } from "@/components/alert-card"
@@ -103,10 +102,12 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopNav />
-      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <Sidebar scenario={scenario} onScenarioChange={setScenario} />
+
+      {/* Main content area — offset for sidebar on desktop */}
+      <main className="min-h-screen px-4 pt-16 pb-12 lg:ml-[260px] lg:px-8 lg:pt-8">
         {/* Page heading */}
-        <div className="mb-4">
+        <div className="mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Burnout Radar
           </h1>
@@ -115,35 +116,44 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        {/* Scenario selector */}
-        <div className="mb-6">
-          <ScenarioSelector value={scenario} onChange={setScenario} />
-        </div>
-
-        {/* Main 2-column grid */}
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* LEFT column: Status */}
-          <div className="flex flex-col gap-6">
-            <RiskGauge value={data.risk} />
-            <ProjectionChart data={data.chart} />
-            <AlertCard
-              text={data.alertText}
-              severity={data.risk > 70 ? "high" : data.risk >= 35 ? "medium" : "low"}
-            />
+        {/* SECTION: Overview — Hero chart with gauge overlay */}
+        <section id="overview" className="scroll-mt-8 mb-6">
+          <div className="relative">
+            <ProjectionChart data={data.chart} hero />
+            {/* Gauge overlay — top right corner on desktop, stacked below on mobile */}
+            <div className="mt-4 lg:absolute lg:right-4 lg:top-4 lg:mt-0 lg:w-[240px]">
+              <RiskGauge value={data.risk} compact />
+            </div>
           </div>
+        </section>
 
-          {/* RIGHT column: Why + Actions */}
-          <div className="flex flex-col gap-6">
+        {/* Alert */}
+        <section className="mb-6">
+          <AlertCard
+            text={data.alertText}
+            severity={data.risk > 70 ? "high" : data.risk >= 35 ? "medium" : "low"}
+          />
+        </section>
+
+        {/* SECTION: Risk Factors + Insights — 2 column */}
+        <section id="risk-factors" className="scroll-mt-8 mb-6">
+          <div className="grid gap-6 lg:grid-cols-2">
             <ContributingFactors factors={data.factors} />
-            <ExplanationCard text={data.explanation} />
-            <ActionPlan />
+            <div id="insights" className="scroll-mt-8 flex flex-col gap-6">
+              <ExplanationCard text={data.explanation} />
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* BOTTOM full-width: What-if Simulator */}
-        <div className="mt-6">
+        {/* SECTION: Action Plan */}
+        <section id="action-plan" className="scroll-mt-8 mb-6">
+          <ActionPlan />
+        </section>
+
+        {/* SECTION: Simulator */}
+        <section id="simulator" className="scroll-mt-8">
           <WhatIfSimulator baselineRisk={data.risk} />
-        </div>
+        </section>
       </main>
     </div>
   )
