@@ -6,16 +6,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { Factor } from "@/app/page"
 
-const factors = [
-  { name: "Sleep", value: 0.82, color: "hsl(var(--risk-high))" },
-  { name: "Deadlines", value: 0.75, color: "hsl(var(--risk-high))" },
-  { name: "Stress", value: 0.68, color: "hsl(var(--risk-medium))" },
-  { name: "Workload", value: 0.55, color: "hsl(var(--risk-medium))" },
-  { name: "Sentiment", value: 0.32, color: "hsl(var(--risk-low))" },
-]
+function getBarColor(value: number) {
+  if (value < 0.35) return "hsl(var(--risk-low))"
+  if (value <= 0.7) return "hsl(var(--risk-medium))"
+  return "hsl(var(--risk-high))"
+}
 
-export function ContributingFactors() {
+interface ContributingFactorsProps {
+  factors: Factor[]
+}
+
+export function ContributingFactors({ factors }: ContributingFactorsProps) {
   return (
     <Card>
       <CardHeader>
@@ -38,7 +41,7 @@ export function ContributingFactors() {
                   className="h-full rounded-full transition-all duration-500"
                   style={{
                     width: `${factor.value * 100}%`,
-                    backgroundColor: factor.color,
+                    backgroundColor: getBarColor(factor.value),
                   }}
                 />
               </div>

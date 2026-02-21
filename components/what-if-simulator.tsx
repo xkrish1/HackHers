@@ -11,9 +11,11 @@ import {
 import { Slider } from "@/components/ui/slider"
 import { ArrowDown, ArrowUp, Minus } from "lucide-react"
 
-const BASELINE_RISK = 72
+interface WhatIfSimulatorProps {
+  baselineRisk?: number
+}
 
-export function WhatIfSimulator() {
+export function WhatIfSimulator({ baselineRisk = 72 }: WhatIfSimulatorProps) {
   const [sleepHours, setSleepHours] = useState([6])
   const [deadlines, setDeadlines] = useState([5])
   const [workHours, setWorkHours] = useState([50])
@@ -26,7 +28,7 @@ export function WhatIfSimulator() {
     return Math.max(0, Math.min(100, Math.round(raw)))
   }, [sleepHours, deadlines, workHours])
 
-  const delta = newRisk - BASELINE_RISK
+  const delta = newRisk - baselineRisk
   const deltaSign = delta > 0 ? "+" : ""
 
   function getDeltaColor(d: number) {

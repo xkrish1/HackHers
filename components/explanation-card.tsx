@@ -7,7 +7,11 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Sparkles } from "lucide-react"
 
-export function ExplanationCard() {
+interface ExplanationCardProps {
+  text: string
+}
+
+export function ExplanationCard({ text }: ExplanationCardProps) {
   return (
     <Card>
       <CardHeader>
@@ -25,13 +29,7 @@ export function ExplanationCard() {
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm leading-relaxed text-foreground">
-          Your sleep dropped <strong>2.1 hours</strong> below your baseline this week and
-          upcoming deadlines have <strong>doubled</strong> compared to last week. These two
-          factors are the primary drivers of the projected spike. Stress levels have also
-          remained elevated, further compounding the risk. Consider addressing sleep first
-          as it has the highest impact weight.
-        </p>
+        <p className="text-sm leading-relaxed text-foreground">{text}</p>
       </CardContent>
     </Card>
   )

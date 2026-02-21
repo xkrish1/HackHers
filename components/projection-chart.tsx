@@ -16,42 +16,28 @@ import {
   ReferenceLine,
 } from "recharts"
 import { useEffect, useRef, useState } from "react"
+import type { ChartPoint } from "@/app/page"
 
-const data = [
-  { day: "Day 1", forecast: 48, upper: 55, lower: 41 },
-  { day: "Day 2", forecast: 50, upper: 58, lower: 42 },
-  { day: "Day 3", forecast: 53, upper: 62, lower: 44 },
-  { day: "Day 4", forecast: 56, upper: 66, lower: 46 },
-  { day: "Day 5", forecast: 59, upper: 70, lower: 48 },
-  { day: "Day 6", forecast: 62, upper: 74, lower: 50 },
-  { day: "Day 7", forecast: 65, upper: 77, lower: 53 },
-  { day: "Day 8", forecast: 67, upper: 80, lower: 54 },
-  { day: "Day 9", forecast: 69, upper: 82, lower: 56 },
-  { day: "Day 10", forecast: 72, upper: 85, lower: 59 },
-  { day: "Day 11", forecast: 74, upper: 87, lower: 61 },
-  { day: "Day 12", forecast: 76, upper: 89, lower: 63 },
-  { day: "Day 13", forecast: 78, upper: 91, lower: 65 },
-  { day: "Day 14", forecast: 80, upper: 93, lower: 67 },
-]
+interface ProjectionChartProps {
+  data: ChartPoint[]
+}
 
-export function ProjectionChart() {
+export function ProjectionChart({ data }: ProjectionChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [chartWidth, setChartWidth] = useState(0)
 
   useEffect(() => {
-    function updateWidth() {
-      if (containerRef.current) {
-        const w = containerRef.current.getBoundingClientRect().width
+    const el = containerRef.current
+    if (!el) return
+
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = entry.contentRect.width
         if (w > 0) setChartWidth(w)
       }
-    }
-    // Measure after layout
-    const raf = requestAnimationFrame(updateWidth)
-    window.addEventListener("resize", updateWidth)
-    return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener("resize", updateWidth)
-    }
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [])
 
   return (
@@ -74,9 +60,14 @@ export function ProjectionChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div ref={containerRef} className="w-full overflow-hidden" style={{ height: 220 }}>
-          {chartWidth > 0 ? (
-          <AreaChart width={chartWidth} height={220} data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+        <div ref={containerRef} className="w-full" style={{ height: 220 }}>
+          {chartWidth > 0 && (
+            <AreaChart
+              width={chartWidth}
+              height={220}
+              data={data}
+              margin={{ top: 4, right: 4, bottom: 0, left: -20 }}
+            >
               <defs>
                 <linearGradient id="confidenceBand" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.15} />
@@ -145,7 +136,7 @@ export function ProjectionChart() {
                 dot={false}
               />
             </AreaChart>
-          ) : null}
+          )}
         </div>
       </CardContent>
     </Card>
