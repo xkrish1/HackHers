@@ -10,12 +10,12 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
   ReferenceLine,
 } from "recharts"
+import { useEffect, useRef, useState } from "react"
 
 const data = [
   { day: "Day 1", forecast: 48, upper: 55, lower: 41 },
@@ -35,6 +35,20 @@ const data = [
 ]
 
 export function ProjectionChart() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [chartWidth, setChartWidth] = useState(400)
+
+  useEffect(() => {
+    function updateWidth() {
+      if (containerRef.current) {
+        setChartWidth(containerRef.current.clientWidth)
+      }
+    }
+    updateWidth()
+    window.addEventListener("resize", updateWidth)
+    return () => window.removeEventListener("resize", updateWidth)
+  }, [])
+
   return (
     <Card>
       <CardHeader>
@@ -55,9 +69,8 @@ export function ProjectionChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="w-full" style={{ height: 220 }}>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+        <div ref={containerRef} className="w-full overflow-hidden" style={{ height: 220 }}>
+          <AreaChart width={chartWidth} height={220} data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="confidenceBand" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.15} />
@@ -126,7 +139,6 @@ export function ProjectionChart() {
                 dot={false}
               />
             </AreaChart>
-          </ResponsiveContainer>
         </div>
       </CardContent>
     </Card>
