@@ -36,17 +36,22 @@ const data = [
 
 export function ProjectionChart() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [chartWidth, setChartWidth] = useState(400)
+  const [chartWidth, setChartWidth] = useState(0)
 
   useEffect(() => {
     function updateWidth() {
       if (containerRef.current) {
-        setChartWidth(containerRef.current.clientWidth)
+        const w = containerRef.current.getBoundingClientRect().width
+        if (w > 0) setChartWidth(w)
       }
     }
-    updateWidth()
+    // Measure after layout
+    const raf = requestAnimationFrame(updateWidth)
     window.addEventListener("resize", updateWidth)
-    return () => window.removeEventListener("resize", updateWidth)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener("resize", updateWidth)
+    }
   }, [])
 
   return (
@@ -70,6 +75,7 @@ export function ProjectionChart() {
       </CardHeader>
       <CardContent>
         <div ref={containerRef} className="w-full overflow-hidden" style={{ height: 220 }}>
+          {chartWidth > 0 ? (
           <AreaChart width={chartWidth} height={220} data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="confidenceBand" x1="0" y1="0" x2="0" y2="1">
@@ -139,6 +145,7 @@ export function ProjectionChart() {
                 dot={false}
               />
             </AreaChart>
+          ) : null}
         </div>
       </CardContent>
     </Card>
