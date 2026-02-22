@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.625rem;
+
+  /* Deep ocean dark palette — always dark */
+  --background: 220 25% 6%;
+  --foreground: 210 20% 92%;
+
+  --card: 215 25% 10%;
+  --card-foreground: 210 20% 92%;
+
+  --popover: 215 25% 10%;
+  --popover-foreground: 210 20% 92%;
+
+  --primary: 175 70% 42%;
+  --primary-foreground: 220 25% 6%;
+
+  --secondary: 215 22% 14%;
+  --secondary-foreground: 210 16% 75%;
+
+  --muted: 215 22% 14%;
+  --muted-foreground: 215 14% 52%;
+
+  --accent: 215 22% 16%;
+  --accent-foreground: 210 20% 92%;
+
+  --destructive: 0 72% 55%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 215 20% 16%;
+  --input: 215 20% 16%;
+  --ring: 175 70% 42%;
+
+  --chart-1: 175 70% 42%;
+  --chart-2: 38 92% 55%;
+  --chart-3: 0 72% 55%;
+  --chart-4: 210 20% 65%;
+  --chart-5: 215 14% 38%;
+
+  /* Risk colors */
+  --risk-low: 152 69% 46%;
+  --risk-medium: 38 92% 55%;
+  --risk-high: 0 72% 55%;
+
+  /* Glassmorphism tokens */
+  --glass-bg: 215 25% 12% / 0.4;
+  --glass-border: 210 20% 92% / 0.08;
+  --glass-highlight: 210 20% 92% / 0.04;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --radius: var(--radius);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --color-risk-low: hsl(var(--risk-low));
+  --color-risk-medium: hsl(var(--risk-medium));
+  --color-risk-high: hsl(var(--risk-high));
+  --color-glass-bg: hsl(var(--glass-bg));
+  --color-glass-border: hsl(var(--glass-border));
+  --color-glass-highlight: hsl(var(--glass-highlight));
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+/* Glassmorphism card utility */
+.glass {
+  background: hsl(var(--glass-bg));
+  border: 1px solid hsl(var(--glass-border));
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.glass-subtle {
+  background: hsl(215 25% 10% / 0.55);
+  border: 1px solid hsl(var(--glass-border));
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for the dark theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}

@@ -1,0 +1,13 @@
+# Node / Next basics
+node_modules/
+.next/
+
+# macOS
+.DS_Store
+
+# Local env files (do NOT commit)
+.env.local
+.env.*
+
+# Dev artifacts
+.pulse_store.json
